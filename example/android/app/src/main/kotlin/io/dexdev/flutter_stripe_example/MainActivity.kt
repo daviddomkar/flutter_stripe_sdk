@@ -1,4 +1,4 @@
-package com.example.flutter_stripe_example
+package io.dexdev.flutter_stripe_example
 
 import android.os.Bundle
 

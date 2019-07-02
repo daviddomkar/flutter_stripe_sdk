@@ -1,4 +1,4 @@
-package com.example.flutter_stripe
+package io.dexdev.flutter_stripe
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
