@@ -5,12 +5,12 @@ import 'package:flutter/services.dart';
 class FlutterStripe {
   static const MethodChannel _channel = const MethodChannel('flutter_stripe');
 
-  static Future<void> init(String publishableKey) async {
-    await _channel.invokeListMethod('init', publishableKey);
-  }
+  static String _publishableKey;
+  static bool _initialized = false;
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
+  static Future<void> init(String publishableKey) async {
+    _publishableKey = publishableKey;
+    await _channel.invokeListMethod('init', publishableKey);
+    _initialized = true;
   }
 }

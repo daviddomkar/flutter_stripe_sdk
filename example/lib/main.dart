@@ -15,8 +15,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
-    FlutterStripe.init('pk_test_uw6xwKRPaKrWJfEYy8hpZp6r00x3F70R3s');
   }
 
   @override

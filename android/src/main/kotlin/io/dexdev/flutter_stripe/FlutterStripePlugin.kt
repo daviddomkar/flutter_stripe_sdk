@@ -26,7 +26,7 @@ class FlutterStripePlugin(private val activity: Activity): MethodCallHandler {
       init(call.argument<String>("publishableKey")!!)
       result.success(null)
     } else {
-      result.notImplemented()
+      result.notImplemented();
     }
   }
 
@@ -34,6 +34,4 @@ class FlutterStripePlugin(private val activity: Activity): MethodCallHandler {
     PaymentConfiguration.init(publishableKey)
     stripe = Stripe(activity, PaymentConfiguration.getInstance().publishableKey)
   }
-
-
 }
