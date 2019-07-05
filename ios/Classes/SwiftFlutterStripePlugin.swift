@@ -16,7 +16,7 @@ public class SwiftFlutterStripePlugin: NSObject, FlutterPlugin {
         result(nil)
         break
       default:
-        result(FlutterMethodNotImplemented);
+        result(FlutterMethodNotImplemented)
         break
     }
     
