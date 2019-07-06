@@ -36,17 +36,12 @@ class FlutterStripePlugin(private val activity: Activity, private val methodChan
         result.success(null)
       }
       "onKeyUpdate" -> {
-        if (keyUpdateListener != null) {
-          Log.d("flutter_stripe", "onKeyUpdatePlatform " + call.argument("stripeResponseJson")!!)
-          keyUpdateListener!!.onKeyUpdate(call.argument("stripeResponseJson")!!)
-        }
+        keyUpdateListener?.onKeyUpdate(call.argument("stripeResponseJson")!!)
 
         result.success(null)
       }
       "onKeyUpdateFailure" -> {
-        if (keyUpdateListener != null) {
-          keyUpdateListener!!.onKeyUpdateFailure(call.argument("responseCode")!!, call.argument("message")!!)
-        }
+        keyUpdateListener?.onKeyUpdateFailure(call.argument("responseCode")!!, call.argument("message")!!)
 
         result.success(null)
       }

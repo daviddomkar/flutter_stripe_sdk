@@ -55,7 +55,7 @@ class CustomerSession {
 
 class _EphemeralKeyUpdateListener extends EphemeralKeyUpdateListener {
   @override
-  void onKeyUpdate(String stripeResponseJson) {
+  void onKeyUpdate(dynamic stripeResponseJson) {
     Platform.channel.invokeMethod('onKeyUpdate', <String, dynamic>{
       'stripeResponseJson': stripeResponseJson,
     });
