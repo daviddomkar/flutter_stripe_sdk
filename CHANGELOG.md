@@ -1,3 +1,6 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+Initial release
+
+* Ephemeral keys creation
+* Basic customer session management

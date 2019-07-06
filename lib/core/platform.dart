@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 
 class Platform {
-  static const MethodChannel _channel = const MethodChannel('flutter_stripe');
+  static const MethodChannel _channel = const MethodChannel('flutter_stripe_sdk');
   static Platform _instance = Platform._internal();
 
   Map<String, List<Future<dynamic> Function(dynamic arguments)>> _methodHandlers;

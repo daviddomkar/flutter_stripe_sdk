@@ -41,7 +41,7 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_stripe:
+  flutter_stripe_sdk:
     dependency: "direct dev"
     description:
       path: ".."

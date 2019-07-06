@@ -1,7 +1,6 @@
-package io.dexdev.flutter_stripe
+package io.dexdev.flutter_stripe_sdk
 
 import android.app.Activity
-import android.util.Log
 import com.stripe.android.CustomerSession
 import com.stripe.android.EphemeralKeyUpdateListener
 import com.stripe.android.Stripe
@@ -11,7 +10,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
-class FlutterStripePlugin(private val activity: Activity, private val methodChannel: MethodChannel): MethodCallHandler {
+class FlutterStripeSDKPlugin(private val activity: Activity, private val methodChannel: MethodChannel): MethodCallHandler {
 
   private lateinit var stripe: Stripe
 
@@ -20,8 +19,8 @@ class FlutterStripePlugin(private val activity: Activity, private val methodChan
   companion object {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
-      val channel = MethodChannel(registrar.messenger(), "flutter_stripe")
-      channel.setMethodCallHandler(FlutterStripePlugin(registrar.activity(), channel))
+      val channel = MethodChannel(registrar.messenger(), "flutter_stripe_sdk")
+      channel.setMethodCallHandler(FlutterStripeSDKPlugin(registrar.activity(), channel))
     }
   }
 

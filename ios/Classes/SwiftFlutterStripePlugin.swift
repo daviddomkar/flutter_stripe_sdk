@@ -2,7 +2,7 @@ import Flutter
 import UIKit
 import Stripe
 
-public class SwiftFlutterStripePlugin: NSObject, FlutterPlugin {
+public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin {
   private let ephemeralKeyProvider: EphemeralKeyProvider;
   private let methodChannel: FlutterMethodChannel;
   
@@ -14,8 +14,8 @@ public class SwiftFlutterStripePlugin: NSObject, FlutterPlugin {
   }
   
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "flutter_stripe", binaryMessenger: registrar.messenger())
-    let instance = SwiftFlutterStripePlugin(methodChannel: channel)
+    let channel = FlutterMethodChannel(name: "flutter_stripe_sdk", binaryMessenger: registrar.messenger())
+    let instance = SwiftFlutterStripeSDKPlugin(methodChannel: channel)
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 
@@ -35,7 +35,7 @@ public class SwiftFlutterStripePlugin: NSObject, FlutterPlugin {
       result(nil)
       break
     case "onKeyUpdateFailure":
-      ephemeralKeyProvider.keyUpdateListener?(nil, NSError(domain: "flutter_stripe", code: (call.arguments as! Dictionary<String, AnyObject>)["responseCode"] as! Int, userInfo: ["message": (call.arguments as! Dictionary<String, AnyObject>)["message"] as! String]))
+      ephemeralKeyProvider.keyUpdateListener?(nil, NSError(domain: "flutter_stripe_sdk", code: (call.arguments as! Dictionary<String, AnyObject>)["responseCode"] as! Int, userInfo: ["message": (call.arguments as! Dictionary<String, AnyObject>)["message"] as! String]))
 
       result(nil)
       break

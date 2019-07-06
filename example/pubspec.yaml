@@ -1,5 +1,5 @@
-name: flutter_stripe_example
-description: Demonstrates how to use the flutter_stripe plugin.
+name: flutter_stripe_sdk_example
+description: Demonstrates how to use the flutter_stripe_sdk plugin.
 publish_to: 'none'
 
 environment:
@@ -17,7 +17,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_stripe:
+  flutter_stripe_sdk:
     path: ../
 
 # For information on the generic Dart part of this file, see the

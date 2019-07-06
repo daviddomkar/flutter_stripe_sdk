@@ -1,8 +1,8 @@
-#import "FlutterStripePlugin.h"
-#import <flutter_stripe/flutter_stripe-Swift.h>
+#import "FlutterStripeSDKPlugin.h"
+#import <flutter_stripe_sdk/flutter_stripe_sdk-Swift.h>
 
-@implementation FlutterStripePlugin
+@implementation FlutterStripeSDKPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  [SwiftFlutterStripePlugin registerWithRegistrar:registrar];
+  [SwiftFlutterStripeSDKPlugin registerWithRegistrar:registrar];
 }
 @end

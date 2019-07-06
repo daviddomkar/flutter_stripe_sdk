@@ -1,4 +1,4 @@
-import 'package:flutter_stripe/api_key_validator.dart';
+import 'package:flutter_stripe_sdk/api_key_validator.dart';
 
 class PaymentConfiguration {
   static PaymentConfiguration _instance;

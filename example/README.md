@@ -1,6 +1,6 @@
-# flutter_stripe_example
+# flutter_stripe_sdk_example
 
-Demonstrates how to use the flutter_stripe plugin.
+Demonstrates how to use the flutter_stripe_sdk plugin.
 
 ## Getting Started
 

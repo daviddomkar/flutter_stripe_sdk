@@ -1,14 +1,13 @@
-# flutter_stripe
+# flutter_stripe_sdk
 
-A new flutter plugin project.
+Unofficial Flutter wrapper around Stripe Android and iOS SDKs.
+
+Plugin is in very early stage and only small subset of functionality is implemented. I am working on this as part of my personal application and I will be updating it as I go.
 
 ## Getting Started
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+Project is trying to mimic stripe Android SDK API in Dart. You can start by following the guide here: https://stripe.com/docs/mobile/android/standard
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Currently only creation of Ephemeral keys and basic Customer session management are implemented. You can look at example directory for API demonstration
+
+Contributions are welcome!

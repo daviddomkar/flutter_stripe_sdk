@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter_stripe/api_key_validator.dart';
-import 'package:flutter_stripe/core/platform.dart';
+import 'package:flutter_stripe_sdk/api_key_validator.dart';
+import 'package:flutter_stripe_sdk/core/platform.dart';
 
 class Stripe {
   bool _initialized = false;

@@ -1,6 +1,6 @@
-import 'package:flutter_stripe/core/platform.dart';
-import 'package:flutter_stripe/ephemeral_key_provider.dart';
-import 'package:flutter_stripe/ephemeral_key_update_listener.dart';
+import 'package:flutter_stripe_sdk/core/platform.dart';
+import 'package:flutter_stripe_sdk/ephemeral_key_provider.dart';
+import 'package:flutter_stripe_sdk/ephemeral_key_update_listener.dart';
 
 class CustomerSession {
   static CustomerSession _instance;

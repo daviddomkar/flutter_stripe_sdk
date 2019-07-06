@@ -1,4 +1,4 @@
 #import <Flutter/Flutter.h>
 
-@interface FlutterStripePlugin : NSObject<FlutterPlugin>
+@interface FlutterStripeSDKPlugin : NSObject<FlutterPlugin>
 @end

@@ -1,4 +1,4 @@
-group 'io.dexdev.flutter_stripe'
+group 'io.dexdev.flutter_stripe_sdk'
 version '1.0-SNAPSHOT'
 
 buildscript {
