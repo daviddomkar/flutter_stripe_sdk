@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io' as io show Platform;
 import 'package:flutter_stripe_sdk/core/platform.dart';
 import 'package:flutter_stripe_sdk/ephemeral_key_provider.dart';
 import 'package:flutter_stripe_sdk/ephemeral_key_update_listener.dart';
@@ -57,7 +59,8 @@ class _EphemeralKeyUpdateListener extends EphemeralKeyUpdateListener {
   @override
   void onKeyUpdate(dynamic stripeResponseJson) {
     Platform.channel.invokeMethod('onKeyUpdate', <String, dynamic>{
-      'stripeResponseJson': stripeResponseJson,
+      'stripeResponseJson':
+          io.Platform.isAndroid ? jsonEncode(stripeResponseJson) : stripeResponseJson,
     });
   }
 
