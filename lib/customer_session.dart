@@ -1,8 +1,13 @@
 import 'dart:convert';
 import 'dart:io' as io show Platform;
+import 'package:flutter/services.dart';
 import 'package:flutter_stripe_sdk/core/platform.dart';
 import 'package:flutter_stripe_sdk/ephemeral_key_provider.dart';
 import 'package:flutter_stripe_sdk/ephemeral_key_update_listener.dart';
+import 'package:flutter_stripe_sdk/model/customer.dart';
+import 'package:flutter_stripe_sdk/stripe.dart';
+import 'package:flutter_stripe_sdk/stripe_error.dart';
+import 'package:flutter_stripe_sdk/stripe_exception.dart';
 
 class CustomerSession {
   static CustomerSession _instance;
@@ -30,6 +35,7 @@ class CustomerSession {
   static Future<void> endCustomerSession() async {
     _instance._dispose();
     await Platform.channel.invokeMethod('endCustomerSession');
+    _instance = null;
   }
 
   EphemeralKeyProvider _keyProvider;
@@ -40,6 +46,17 @@ class CustomerSession {
     _ephemeralKeyUpdateListener = _EphemeralKeyUpdateListener();
     Platform.instance
         .registerMethodCallHandler('createEphemeralKey', _onPlatformCreateEphemeralKey);
+  }
+
+  Future<Customer> retrieveCurrentCustomer() async {
+    try {
+      var result = await Platform.channel.invokeMethod('retrieveCurrentCustomer');
+      print(result);
+
+      return Customer();
+    } on PlatformException catch (e) {
+      throw StripeException(int.parse(e.code), e.message, e.details as StripeError);
+    }
   }
 
   Future<void> _onPlatformCreateEphemeralKey(dynamic arguments) async {
