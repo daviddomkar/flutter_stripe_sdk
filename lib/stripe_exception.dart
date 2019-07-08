@@ -5,5 +5,5 @@ class StripeException implements Exception {
 
   final int errorCode;
   final String errorMessage;
-  final StripeError stripeError;
+  final dynamic stripeError;
 }

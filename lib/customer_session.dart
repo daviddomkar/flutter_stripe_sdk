@@ -60,7 +60,9 @@ class CustomerSession {
       } else if (io.Platform.isAndroid && e.code == "0") {
         throw StripeException(0, "No internet connection", null);
       } else {
-        throw StripeException(int.parse(e.code), e.message, e.details as StripeError);
+        print(e.details);
+
+        throw StripeException(int.parse(e.code), e.message, e.details);
       }
     }
   }
