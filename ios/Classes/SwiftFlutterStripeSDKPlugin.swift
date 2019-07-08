@@ -39,6 +39,9 @@ public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin {
 
       result(nil)
       break
+    case "retrieveCurrentCustomer":
+      _retrieveCurrentCustomer(result: result)
+      break;
     case "endCustomerSession":
       _endCustomerSession()
       result(nil)
@@ -55,6 +58,18 @@ public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin {
   
   private func _initCustomerSession() {
     customerSession = STPCustomerContext(keyProvider: ephemeralKeyProvider)
+  }
+  
+  private func _retrieveCurrentCustomer(result: @escaping FlutterResult) {
+    customerSession?.retrieveCustomer({ (customer: STPCustomer?, error: Error?) in
+      if (customer != nil) {
+        result(customer?.allResponseFields)
+      }
+      
+      if (error != nil) {
+        result(FlutterError(code: String((error! as NSError).code), message: (error! as NSError).localizedDescription, details: (error! as NSError).userInfo))
+      }
+    })
   }
   
   private func _endCustomerSession() {
