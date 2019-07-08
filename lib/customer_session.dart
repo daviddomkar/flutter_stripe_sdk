@@ -55,7 +55,13 @@ class CustomerSession {
 
       return Customer();
     } on PlatformException catch (e) {
-      throw StripeException(int.parse(e.code), e.message, e.details as StripeError);
+      if (io.Platform.isIOS && e.code == "-1001") {
+        throw StripeException(0, "No internet connection", null);
+      } else if (io.Platform.isAndroid && e.code == "0") {
+        throw StripeException(0, "No internet connection", null);
+      } else {
+        throw StripeException(int.parse(e.code), e.message, e.details as StripeError);
+      }
     }
   }
 
