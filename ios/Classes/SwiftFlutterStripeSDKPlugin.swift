@@ -67,7 +67,7 @@ public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin {
       }
       
       if (error != nil) {
-        result(FlutterError(code: String((error! as NSError).code), message: (error! as NSError).localizedDescription, details: (error! as NSError).userInfo))
+        result(FlutterError(code: "0", message: "Failed to retrieve current customer. Possible connection issues.", details: nil))
       }
     })
   }
