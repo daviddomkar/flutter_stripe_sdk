@@ -7,8 +7,6 @@ import 'package:flutter_stripe_sdk/ephemeral_key_provider.dart';
 import 'package:flutter_stripe_sdk/ephemeral_key_update_listener.dart';
 import 'package:flutter_stripe_sdk/model/customer.dart';
 import 'package:flutter_stripe_sdk/model/payment_method.dart';
-import 'package:flutter_stripe_sdk/stripe.dart';
-import 'package:flutter_stripe_sdk/stripe_error.dart';
 import 'package:flutter_stripe_sdk/stripe_exception.dart';
 
 class CustomerSession {
@@ -61,7 +59,7 @@ class CustomerSession {
     }
   }
 
-  Future<Customer> updateCurrentCustomer() async {
+  Future<void> updateCurrentCustomer() async {
     try {
       var result = await Platform.channel.invokeMethod('updateCurrentCustomer');
       return Customer(
@@ -93,39 +91,21 @@ class CustomerSession {
     }
   }
 
-  Future<PaymentMethod> attachPaymentMethod({@required String id}) async {
+  Future<void> attachPaymentMethod({@required String id}) async {
     try {
-      var result = await Platform.channel.invokeMethod('attachPaymentMethod', <String, dynamic>{
+      await Platform.channel.invokeMethod('attachPaymentMethod', <String, dynamic>{
         'id': id,
       });
-
-      return PaymentMethod(
-        id: result['id'],
-        created: result['created'],
-        liveMode: result['liveMode'],
-        type: result['type'],
-        customerId: result['customerId'],
-        metadata: result['metadata'],
-      );
     } on PlatformException catch (e) {
       throw StripeException(int.parse(e.code), e.message, e.details);
     }
   }
 
-  Future<PaymentMethod> detachPaymentMethod({@required String id}) async {
+  Future<void> detachPaymentMethod({@required String id}) async {
     try {
-      var result = await Platform.channel.invokeMethod('detachPaymentMethod', <String, dynamic>{
+      await Platform.channel.invokeMethod('detachPaymentMethod', <String, dynamic>{
         'id': id,
       });
-
-      return PaymentMethod(
-        id: result['id'],
-        created: result['created'],
-        liveMode: result['liveMode'],
-        type: result['type'],
-        customerId: result['customerId'],
-        metadata: result['metadata'],
-      );
     } on PlatformException catch (e) {
       throw StripeException(int.parse(e.code), e.message, e.details);
     }

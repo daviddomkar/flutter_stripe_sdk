@@ -1,6 +1,7 @@
 package io.dexdev.flutter_stripe_sdk
 
 import android.app.Activity
+import android.util.Log
 import com.stripe.android.*
 import com.stripe.android.model.Customer
 import com.stripe.android.model.PaymentMethod
@@ -99,7 +100,7 @@ class FlutterStripeSDKPlugin(private val activity: Activity, private val methodC
   private fun updateCurrentCustomer(result: Result) {
     CustomerSession.getInstance().updateCurrentCustomer(object : CustomerSession.CustomerRetrievalListener {
       override fun onCustomerRetrieved(customer: Customer) {
-        result.success(customer.toMap())
+        result.success(null)
       }
 
       override fun onError(errorCode: Int, errorMessage: String, stripeError: StripeError?) {
@@ -123,10 +124,15 @@ class FlutterStripeSDKPlugin(private val activity: Activity, private val methodC
   private fun attachPaymentMethod(id: String, result: Result) {
     CustomerSession.getInstance().attachPaymentMethod(id, object : CustomerSession.PaymentMethodRetrievalListener {
       override fun onPaymentMethodRetrieved(paymentMethod: PaymentMethod) {
-        result.success(paymentMethod.toMap())
+        result.success(null)
       }
 
       override fun onError(errorCode: Int, errorMessage: String, stripeError: StripeError?) {
+        Log.d("flutter_stripe_sdk", "ahoj jejda")
+        Log.d("flutter_stripe_sdk", errorCode.toString())
+        Log.d("flutter_stripe_sdk", errorMessage)
+        Log.d("flutter_stripe_sdk", stripeError?.type)
+
         result.error("0", "Failed to attach payment method. Possible connection issues.", null)
       }
     })
@@ -135,7 +141,7 @@ class FlutterStripeSDKPlugin(private val activity: Activity, private val methodC
   private fun detachPaymentMethod(id: String, result: Result) {
     CustomerSession.getInstance().detachPaymentMethod(id, object : CustomerSession.PaymentMethodRetrievalListener {
       override fun onPaymentMethodRetrieved(paymentMethod: PaymentMethod) {
-        result.success(paymentMethod.toMap())
+        result.success(null)
       }
 
       override fun onError(errorCode: Int, errorMessage: String, stripeError: StripeError?) {
