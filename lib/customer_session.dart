@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io' as io show Platform;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_stripe_sdk/core/platform.dart';
 import 'package:flutter_stripe_sdk/ephemeral_key_provider.dart';
 import 'package:flutter_stripe_sdk/ephemeral_key_update_listener.dart';
 import 'package:flutter_stripe_sdk/model/customer.dart';
+import 'package:flutter_stripe_sdk/model/payment_method.dart';
 import 'package:flutter_stripe_sdk/stripe.dart';
 import 'package:flutter_stripe_sdk/stripe_error.dart';
 import 'package:flutter_stripe_sdk/stripe_exception.dart';
@@ -51,19 +53,81 @@ class CustomerSession {
   Future<Customer> retrieveCurrentCustomer() async {
     try {
       var result = await Platform.channel.invokeMethod('retrieveCurrentCustomer');
-      print(result);
-
-      return Customer();
+      return Customer(
+        id: result['id'],
+      );
     } on PlatformException catch (e) {
-      if (io.Platform.isIOS && e.code == "-1001") {
-        throw StripeException(0, "No internet connection", null);
-      } else if (io.Platform.isAndroid && e.code == "0") {
-        throw StripeException(0, "No internet connection", null);
-      } else {
-        print(e.details);
+      throw StripeException(int.parse(e.code), e.message, e.details);
+    }
+  }
 
-        throw StripeException(int.parse(e.code), e.message, e.details);
-      }
+  Future<Customer> updateCurrentCustomer() async {
+    try {
+      var result = await Platform.channel.invokeMethod('updateCurrentCustomer');
+      return Customer(
+        id: result['id'],
+      );
+    } on PlatformException catch (e) {
+      throw StripeException(int.parse(e.code), e.message, e.details);
+    }
+  }
+
+  Future<List<PaymentMethod>> getPaymentMethods({@required PaymentMethodType type}) async {
+    try {
+      var result = await Platform.channel.invokeListMethod('getPaymentMethods', <String, dynamic>{
+        'type': type,
+      });
+
+      return result.map((data) {
+        return PaymentMethod(
+          id: data['id'],
+          created: data['created'],
+          liveMode: data['liveMode'],
+          type: data['type'],
+          customerId: data['customerId'],
+          metadata: data['metadata'],
+        );
+      });
+    } on PlatformException catch (e) {
+      throw StripeException(int.parse(e.code), e.message, e.details);
+    }
+  }
+
+  Future<PaymentMethod> attachPaymentMethod({@required String id}) async {
+    try {
+      var result = await Platform.channel.invokeMethod('attachPaymentMethod', <String, dynamic>{
+        'id': id,
+      });
+
+      return PaymentMethod(
+        id: result['id'],
+        created: result['created'],
+        liveMode: result['liveMode'],
+        type: result['type'],
+        customerId: result['customerId'],
+        metadata: result['metadata'],
+      );
+    } on PlatformException catch (e) {
+      throw StripeException(int.parse(e.code), e.message, e.details);
+    }
+  }
+
+  Future<PaymentMethod> detachPaymentMethod({@required String id}) async {
+    try {
+      var result = await Platform.channel.invokeMethod('detachPaymentMethod', <String, dynamic>{
+        'id': id,
+      });
+
+      return PaymentMethod(
+        id: result['id'],
+        created: result['created'],
+        liveMode: result['liveMode'],
+        type: result['type'],
+        customerId: result['customerId'],
+        metadata: result['metadata'],
+      );
+    } on PlatformException catch (e) {
+      throw StripeException(int.parse(e.code), e.message, e.details);
     }
   }
 
