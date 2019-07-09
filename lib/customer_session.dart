@@ -75,7 +75,7 @@ class CustomerSession {
   Future<List<PaymentMethod>> getPaymentMethods({@required PaymentMethodType type}) async {
     try {
       var result = await Platform.channel.invokeListMethod('getPaymentMethods', <String, dynamic>{
-        'type': type,
+        'type': getStringFromPaymentMethodType(type),
       });
 
       return result.map((data) {
@@ -87,7 +87,7 @@ class CustomerSession {
           customerId: data['customerId'],
           metadata: data['metadata'],
         );
-      });
+      }).toList();
     } on PlatformException catch (e) {
       throw StripeException(int.parse(e.code), e.message, e.details);
     }

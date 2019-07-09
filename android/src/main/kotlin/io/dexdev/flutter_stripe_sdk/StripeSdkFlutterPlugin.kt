@@ -1,10 +1,7 @@
 package io.dexdev.flutter_stripe_sdk
 
 import android.app.Activity
-import com.stripe.android.CustomerSession
-import com.stripe.android.EphemeralKeyUpdateListener
-import com.stripe.android.Stripe
-import com.stripe.android.StripeError
+import com.stripe.android.*
 import com.stripe.android.model.Customer
 import com.stripe.android.model.PaymentMethod
 import io.flutter.plugin.common.MethodCall
@@ -54,7 +51,12 @@ class FlutterStripeSDKPlugin(private val activity: Activity, private val methodC
         updateCurrentCustomer(result)
       }
       "getPaymentMethods" -> {
-        getPaymentMethods(PaymentMethod.Type.valueOf(call.argument("type")!!), result)
+        getPaymentMethods(when (call.argument<String>("type")) {
+          "card" -> PaymentMethod.Type.Card
+          "card_present" -> PaymentMethod.Type.CardPresent
+          "ideal" -> PaymentMethod.Type.Ideal
+          else -> PaymentMethod.Type.Card
+        }, result)
       }
       "attachPaymentMethod" -> {
         attachPaymentMethod(call.argument("id")!!, result)
@@ -71,7 +73,8 @@ class FlutterStripeSDKPlugin(private val activity: Activity, private val methodC
   }
 
   private fun init(publishableKey: String) {
-    stripe = Stripe(activity, publishableKey)
+    PaymentConfiguration.init(publishableKey)
+    stripe = Stripe(activity, PaymentConfiguration.getInstance().publishableKey)
   }
 
   private fun initCustomerSession() {
