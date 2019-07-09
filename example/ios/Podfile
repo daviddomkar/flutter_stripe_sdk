@@ -4,7 +4,7 @@ platform :ios, '9.0'
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
-pod 'Stripe', :git => 'https://github.com/stripe/stripe-ios.git'
+pod 'Stripe', :git => 'https://github.com/DEXIT33/stripe-ios.git', :branch => 'flutter_stripe_sdk_stable'
 
 project 'Runner', {
   'Debug' => :debug,

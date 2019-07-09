@@ -8,7 +8,7 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `.symlinks/flutter/ios`)
   - flutter_stripe_sdk (from `.symlinks/plugins/flutter_stripe_sdk/ios`)
-  - Stripe (from `https://github.com/stripe/stripe-ios.git`)
+  - Stripe (from `https://github.com/DEXIT33/stripe-ios.git`, branch `flutter_stripe_sdk_stable`)
 
 EXTERNAL SOURCES:
   Flutter:
@@ -16,18 +16,19 @@ EXTERNAL SOURCES:
   flutter_stripe_sdk:
     :path: ".symlinks/plugins/flutter_stripe_sdk/ios"
   Stripe:
-    :git: https://github.com/stripe/stripe-ios.git
+    :branch: flutter_stripe_sdk_stable
+    :git: https://github.com/DEXIT33/stripe-ios.git
 
 CHECKOUT OPTIONS:
   Stripe:
-    :commit: a977ff44276fd5621f8a1d67ee767c623dcfddf9
-    :git: https://github.com/stripe/stripe-ios.git
+    :commit: ea7c1671a0ec25cafb89b51195f312bad56f2ac1
+    :git: https://github.com/DEXIT33/stripe-ios.git
 
 SPEC CHECKSUMS:
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
   flutter_stripe_sdk: fbf0d00800ff06e1ef1f91e91a69ddb25975bdc8
   Stripe: 2c4d0a88817361a102886315ff452d90f65e898b
 
-PODFILE CHECKSUM: beaa50d523144a0c3897cf31f6075a04d9463f9f
+PODFILE CHECKSUM: 2572c11ff69d522cf191c1445c5aeb8b64205ebb
 
 COCOAPODS: 1.7.3

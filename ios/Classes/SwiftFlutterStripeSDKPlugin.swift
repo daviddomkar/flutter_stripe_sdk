@@ -109,10 +109,7 @@ public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin {
   }
   
   private func _attachPaymentMethod(id: String, result: @escaping FlutterResult) {
-    let method = STPPaymentMethod()
-    method.stripeId = id;
-    
-    customerSession?.attachPaymentMethod(toCustomer: method, completion: { (error: Error?) in
+    customerSession?.attachPaymentMethod(toCustomer: id, completion: { (error: Error?) in
       if (error != nil) {
         result(FlutterError(code: "0", message: "Failed to attach payment method. Possible connection issues.", details: nil))
       } else {
@@ -122,10 +119,7 @@ public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin {
   }
   
   private func _detachPaymentMethod(id: String, result: @escaping FlutterResult) {
-    let method = STPPaymentMethod()
-    method.stripeId = id;
-    
-    customerSession?.detachPaymentMethod(fromCustomer: method, completion: { (error: Error?) in
+    customerSession?.detachPaymentMethod(fromCustomer: id, completion: { (error: Error?) in
       if (error != nil) {
         result(FlutterError(code: "0", message: "Failed to detach payment method. Possible connection issues.", details: nil))
       } else {
