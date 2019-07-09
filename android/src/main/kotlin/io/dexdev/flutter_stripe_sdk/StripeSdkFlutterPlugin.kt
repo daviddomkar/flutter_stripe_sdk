@@ -128,11 +128,6 @@ class FlutterStripeSDKPlugin(private val activity: Activity, private val methodC
       }
 
       override fun onError(errorCode: Int, errorMessage: String, stripeError: StripeError?) {
-        Log.d("flutter_stripe_sdk", "ahoj jejda")
-        Log.d("flutter_stripe_sdk", errorCode.toString())
-        Log.d("flutter_stripe_sdk", errorMessage)
-        Log.d("flutter_stripe_sdk", stripeError?.type)
-
         result.error("0", "Failed to attach payment method. Possible connection issues.", null)
       }
     })
