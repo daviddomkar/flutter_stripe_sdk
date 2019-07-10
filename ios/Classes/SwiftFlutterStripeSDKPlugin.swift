@@ -43,16 +43,33 @@ public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin {
       _retrieveCurrentCustomer(result: result)
       break;
     case "updateCurrentCustomer":
-      _retrieveCurrentCustomer(result: result)
+      _updateCurrentCustomer(result: result)
       break;
     case "getPaymentMethods":
-      _retrieveCurrentCustomer(result: result)
+      let paymentMethodType: STPPaymentMethodType;
+      
+      switch (call.arguments as! Dictionary<String, AnyObject>)["type"] as! String {
+        case "card":
+          paymentMethodType = STPPaymentMethodType.typeCard
+          break
+        case "card_present":
+          paymentMethodType = STPPaymentMethodType.typeCardPresent
+          break
+        case "ideal":
+          paymentMethodType = STPPaymentMethodType.typeiDEAL
+          break
+      default:
+          paymentMethodType = STPPaymentMethodType.typeCard
+          break
+      }
+        
+      _getPaymentMethods(type: paymentMethodType, result: result)
       break;
     case "attachPaymentMethod":
-      _retrieveCurrentCustomer(result: result)
+      _attachPaymentMethod(id: (call.arguments as! Dictionary<String, AnyObject>)["id"] as! String, result: result)
       break;
     case "detachPaymentMethod":
-      _retrieveCurrentCustomer(result: result)
+      _detachPaymentMethod(id: (call.arguments as! Dictionary<String, AnyObject>)["id"] as! String, result: result)
       break;
     case "endCustomerSession":
       _endCustomerSession()
@@ -84,7 +101,7 @@ public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin {
     })
   }
   
-  private func _updateCurrenCustomer(result: @escaping FlutterResult) {
+  private func _updateCurrentCustomer(result: @escaping FlutterResult) {
     customerSession?.updateCustomer(withShippingAddress: STPAddress(), completion: { (error: Error?) in
       if (error != nil) {
         result(FlutterError(code: "0", message: "Failed to update current customer. Possible connection issues.", details: nil))
