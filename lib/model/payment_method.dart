@@ -1,11 +1,15 @@
 import 'package:meta/meta.dart';
 
+import 'card.dart';
+
 class PaymentMethod {
   PaymentMethod({
     @required this.id,
     this.created,
     this.liveMode,
     this.type,
+    this.billingDetails,
+    this.card,
     this.customerId,
     this.metadata,
   });
@@ -16,12 +20,13 @@ class PaymentMethod {
   final String type;
 
   // TODO Implement this
-  /* final BillingDetails billingDetails;
+  final PaymentMethodBillingDetails billingDetails;
   final Card card;
+  /*
   final CardPresent cardPresent;
   final Ideal ideal; */
   final String customerId;
-  final Map<String, String> metadata;
+  final Map<dynamic, dynamic> metadata;
 }
 
 enum PaymentMethodType { Card, CardPresent, Ideal }
@@ -36,4 +41,11 @@ String getStringFromPaymentMethodType(PaymentMethodType type) {
     case PaymentMethodType.Ideal:
       return "ideal";
   }
+}
+
+class PaymentMethodBillingDetails {
+  PaymentMethodBillingDetails({this.name, this.email});
+
+  final String name;
+  final String email;
 }

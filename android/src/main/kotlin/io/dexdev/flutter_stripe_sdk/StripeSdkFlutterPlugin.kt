@@ -3,13 +3,16 @@ package io.dexdev.flutter_stripe_sdk
 import android.app.Activity
 import android.util.Log
 import com.stripe.android.*
+import com.stripe.android.model.Card
 import com.stripe.android.model.Customer
 import com.stripe.android.model.PaymentMethod
+import com.stripe.android.model.PaymentMethodCreateParams
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
+import java.lang.Exception
 
 class FlutterStripeSDKPlugin(private val activity: Activity, private val methodChannel: MethodChannel): MethodCallHandler {
 
@@ -68,6 +71,12 @@ class FlutterStripeSDKPlugin(private val activity: Activity, private val methodC
       "endCustomerSession" -> {
         endCustomerSession()
         result.success(null)
+      }
+      "createPaymentMethodCard" -> {
+        val card = Card.create(call.argument("cardNumber")!!, call.argument("cardExpMonth")!!, call.argument("cardExpYear")!!, call.argument("cardCvv")!!)
+        val billingDetails = PaymentMethod.BillingDetails.Builder().setName(call.argument("billingDetailsName")!!).setEmail(call.argument("billingDetailsEmail")!!).build()
+
+        createPaymentMethod(PaymentMethodCreateParams.create(card.toPaymentMethodParamsCard(), billingDetails) , result)
       }
       else -> result.notImplemented()
     }
@@ -147,5 +156,17 @@ class FlutterStripeSDKPlugin(private val activity: Activity, private val methodC
 
   private fun endCustomerSession() {
     CustomerSession.endCustomerSession()
+  }
+
+  private fun createPaymentMethod(paymentMethodCreateParams: PaymentMethodCreateParams, result: Result) {
+    stripe.createPaymentMethod(paymentMethodCreateParams, object : ApiResultCallback<PaymentMethod> {
+      override fun onSuccess(paymentMethod: PaymentMethod) {
+        result.success(paymentMethod.toMap())
+      }
+
+      override fun onError(e: Exception) {
+        result.error("0", "Failed to create payment method", e.localizedMessage)
+      }
+    })
   }
 }

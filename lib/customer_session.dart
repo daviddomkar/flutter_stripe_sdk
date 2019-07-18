@@ -9,6 +9,8 @@ import 'package:flutter_stripe_sdk/model/customer.dart';
 import 'package:flutter_stripe_sdk/model/payment_method.dart';
 import 'package:flutter_stripe_sdk/stripe_exception.dart';
 
+import 'model/card.dart';
+
 class CustomerSession {
   static CustomerSession _instance;
 
@@ -61,10 +63,7 @@ class CustomerSession {
 
   Future<void> updateCurrentCustomer() async {
     try {
-      var result = await Platform.channel.invokeMethod('updateCurrentCustomer');
-      return Customer(
-        id: result['id'],
-      );
+      await Platform.channel.invokeMethod('updateCurrentCustomer');
     } on PlatformException catch (e) {
       throw StripeException(int.parse(e.code), e.message, e.details);
     }
@@ -79,11 +78,17 @@ class CustomerSession {
       return result.map((data) {
         return PaymentMethod(
           id: data['id'],
-          created: data['created'],
-          liveMode: data['liveMode'],
-          type: data['type'],
-          customerId: data['customerId'],
-          metadata: data['metadata'],
+          created: data['created'] ?? null,
+          liveMode: data['liveMode'] ?? null,
+          type: data['type'] ?? null,
+          customerId: data['customer'] ?? null,
+          metadata: data['metadata'] ?? null,
+          card: data['type'] == 'card'
+              ? Card(
+                  last4: data['card']['last4'],
+                  brand: data['card']['brand'],
+                )
+              : null,
         );
       }).toList();
     } on PlatformException catch (e) {
