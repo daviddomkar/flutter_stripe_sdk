@@ -75,6 +75,20 @@ public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin {
       _endCustomerSession()
       result(nil)
       break
+    case "createPaymentMethodCard":
+      let cardParams = STPPaymentMethodCardParams()
+      let billingDetails = STPPaymentMethodBillingDetails()
+      
+      cardParams.number = (call.arguments as! Dictionary<String, AnyObject>)["cardNumber"] as? String
+      cardParams.expMonth = (call.arguments as! Dictionary<String, AnyObject>)["cardExpMonth"] as? NSNumber
+      cardParams.expYear = (call.arguments as! Dictionary<String, AnyObject>)["cardExpYear"] as? NSNumber
+      cardParams.cvc = (call.arguments as! Dictionary<String, AnyObject>)["cardCvv"] as? String
+      
+      billingDetails.name = (call.arguments as! Dictionary<String, AnyObject>)["billingDetailsName"] as? String
+      billingDetails.name = (call.arguments as! Dictionary<String, AnyObject>)["billingDetailsEmail"] as? String
+      
+      _createPaymentMethodCard(paymentMethodCreateParams: STPPaymentMethodParams(card: cardParams, billingDetails: billingDetails, metadata: nil), result: result)
+      break
     default:
       result(FlutterMethodNotImplemented)
       break
@@ -148,6 +162,15 @@ public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin {
   private func _endCustomerSession() {
     customerSession?.clearCache()
     customerSession = nil;
+  }
+  private func _createPaymentMethodCard(paymentMethodCreateParams: STPPaymentMethodParams, result: @escaping FlutterResult) {
+    STPAPIClient.shared().createPaymentMethod(with: paymentMethodCreateParams) { (paymentMethod: STPPaymentMethod?, error: Error?) in
+      if (error != nil) {
+        result(FlutterError(code: "0", message: "Failed to create payment method.", details: nil))
+      } else {
+        result(paymentMethod?.allResponseFields)
+      }
+    }
   }
 }
 
