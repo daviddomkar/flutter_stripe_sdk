@@ -12,6 +12,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 import java.lang.Exception
 import android.support.annotation.NonNull
 import android.content.Intent.getIntent
+import android.util.Log.d
 import com.stripe.android.PaymentIntentResult
 import com.stripe.android.model.*
 
@@ -37,21 +38,19 @@ class FlutterStripeSDKPlugin(private val activity: Activity, private val methodC
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
     stripe.onPaymentResult(requestCode, data, object : ApiResultCallback<PaymentIntentResult> {
       override fun onSuccess(result: PaymentIntentResult) {
-        // If authentication succeeded, the PaymentIntent will
-        // have user actions resolved; otherwise, handle the
-        // PaymentIntent status as appropriate (e.g. the
-        // customer may need to choose a new payment method)
-
         val paymentIntent = result.intent
         val status = paymentIntent.status
         if (status == StripeIntent.Status.Succeeded) {
+          d("Stripe", "Success")
           authenticatePaymentResult?.success(null)
         } else {
+          d("StripeError", "Asi success xd")
           authenticatePaymentResult?.error("0", "Failed to complete payment", null)
         }
       }
 
       override fun onError(e: Exception) {
+        d("StripeError", "Error")
         authenticatePaymentResult?.error("0", "Failed to complete payment", e.localizedMessage)
       }
     })
