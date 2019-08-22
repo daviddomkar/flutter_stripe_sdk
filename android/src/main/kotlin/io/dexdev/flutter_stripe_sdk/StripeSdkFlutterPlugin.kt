@@ -1,31 +1,62 @@
 package io.dexdev.flutter_stripe_sdk
 
 import android.app.Activity
-import android.util.Log
+import android.content.Intent
 import com.stripe.android.*
-import com.stripe.android.model.Card
-import com.stripe.android.model.Customer
-import com.stripe.android.model.PaymentMethod
-import com.stripe.android.model.PaymentMethodCreateParams
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import java.lang.Exception
+import android.support.annotation.NonNull
+import android.content.Intent.getIntent
+import com.stripe.android.PaymentIntentResult
+import com.stripe.android.model.*
 
-class FlutterStripeSDKPlugin(private val activity: Activity, private val methodChannel: MethodChannel): MethodCallHandler {
+
+class FlutterStripeSDKPlugin(private val activity: Activity, private val methodChannel: MethodChannel): MethodCallHandler, PluginRegistry.ActivityResultListener {
 
   private lateinit var stripe: Stripe
 
   private var keyUpdateListener: EphemeralKeyUpdateListener? = null
+  private var authenticatePaymentResult: Result? = null
 
   companion object {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "flutter_stripe_sdk")
-      channel.setMethodCallHandler(FlutterStripeSDKPlugin(registrar.activity(), channel))
+      val instance = FlutterStripeSDKPlugin(registrar.activity(), channel)
+
+      registrar.addActivityResultListener(instance)
+      channel.setMethodCallHandler(instance)
     }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+    stripe.onPaymentResult(requestCode, data, object : ApiResultCallback<PaymentIntentResult> {
+      override fun onSuccess(result: PaymentIntentResult) {
+        // If authentication succeeded, the PaymentIntent will
+        // have user actions resolved; otherwise, handle the
+        // PaymentIntent status as appropriate (e.g. the
+        // customer may need to choose a new payment method)
+
+        val paymentIntent = result.intent
+        val status = paymentIntent.status
+        if (status == StripeIntent.Status.Succeeded) {
+          authenticatePaymentResult?.success(null)
+        } else {
+          authenticatePaymentResult?.error("0", "Failed to complete payment", null)
+        }
+      }
+
+      override fun onError(e: Exception) {
+        authenticatePaymentResult?.error("0", "Failed to complete payment", e.localizedMessage)
+      }
+    })
+
+    return false
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
@@ -77,6 +108,11 @@ class FlutterStripeSDKPlugin(private val activity: Activity, private val methodC
         val billingDetails = PaymentMethod.BillingDetails.Builder().setName(call.argument("billingDetailsName")!!).setEmail(call.argument("billingDetailsEmail")!!).build()
 
         createPaymentMethod(PaymentMethodCreateParams.create(card.toPaymentMethodParamsCard(), billingDetails) , result)
+      }
+      "authenticatePayment" -> {
+        val paymentIntentSecret: String = call.argument("paymentIntentSecret")!!
+
+        authenticatePayment(paymentIntentSecret, result)
       }
       else -> result.notImplemented()
     }
@@ -168,5 +204,10 @@ class FlutterStripeSDKPlugin(private val activity: Activity, private val methodC
         result.error("0", "Failed to create payment method", e.localizedMessage)
       }
     })
+  }
+
+  private fun authenticatePayment(paymentIntentSecret: String, result: Result) {
+    authenticatePaymentResult = result
+    stripe.authenticatePayment(activity, paymentIntentSecret)
   }
 }

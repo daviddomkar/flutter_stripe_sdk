@@ -68,4 +68,10 @@ class Stripe {
       throw StripeException(int.parse(e.code), e.message, e.details);
     }
   }
+
+  Future<void> authenticatePayment(String paymentIntentSecret) async {
+    await Platform.channel.invokeMethod('authenticatePayment', <String, dynamic>{
+      "paymentIntentSecret": paymentIntentSecret,
+    });
+  }
 }
