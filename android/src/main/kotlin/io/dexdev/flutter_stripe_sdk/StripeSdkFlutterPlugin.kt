@@ -10,8 +10,6 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import java.lang.Exception
-import android.support.annotation.NonNull
-import android.content.Intent.getIntent
 import android.util.Log.d
 import com.stripe.android.PaymentIntentResult
 import com.stripe.android.model.*
