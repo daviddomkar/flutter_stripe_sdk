@@ -3,7 +3,7 @@ PODS:
   - flutter_stripe_sdk (0.0.1):
     - Flutter
     - Stripe
-  - Stripe (15.0.1)
+  - Stripe (16.0.7)
 
 DEPENDENCIES:
   - Flutter (from `.symlinks/flutter/ios`)
@@ -21,13 +21,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Stripe:
-    :commit: ea7c1671a0ec25cafb89b51195f312bad56f2ac1
+    :commit: 0e6e09ea8f9409f573b8d79282d171f4ce5e604e
     :git: https://github.com/DEXIT33/stripe-ios.git
 
 SPEC CHECKSUMS:
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
   flutter_stripe_sdk: fbf0d00800ff06e1ef1f91e91a69ddb25975bdc8
-  Stripe: 2c4d0a88817361a102886315ff452d90f65e898b
+  Stripe: 67f64f64314503b396a71c55535d5307d7e5c9ff
 
 PODFILE CHECKSUM: 2572c11ff69d522cf191c1445c5aeb8b64205ebb
 

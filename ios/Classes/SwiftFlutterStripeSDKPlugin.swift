@@ -2,20 +2,26 @@ import Flutter
 import UIKit
 import Stripe
 
-public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin {
+public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin, STPAuthenticationContext {
+  public func authenticationPresentingViewController() -> UIViewController {
+    return self.viewController
+  }
+    
   private let ephemeralKeyProvider: EphemeralKeyProvider;
   private let methodChannel: FlutterMethodChannel;
+  private let viewController: UIViewController;
   
   private var customerSession: STPCustomerContext?;
   
-  init(methodChannel: FlutterMethodChannel) {
+  init(methodChannel: FlutterMethodChannel, viewController: UIViewController) {
     self.methodChannel = methodChannel
     self.ephemeralKeyProvider = EphemeralKeyProvider(methodChannel: methodChannel)
+    self.viewController = viewController
   }
   
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "flutter_stripe_sdk", binaryMessenger: registrar.messenger())
-    let instance = SwiftFlutterStripeSDKPlugin(methodChannel: channel)
+    let instance = SwiftFlutterStripeSDKPlugin(methodChannel: channel, viewController: (UIApplication.shared.delegate?.window?!.rootViewController)!)
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 
@@ -85,9 +91,15 @@ public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin {
       cardParams.cvc = (call.arguments as! Dictionary<String, AnyObject>)["cardCvv"] as? String
       
       billingDetails.name = (call.arguments as! Dictionary<String, AnyObject>)["billingDetailsName"] as? String
-      billingDetails.name = (call.arguments as! Dictionary<String, AnyObject>)["billingDetailsEmail"] as? String
+      billingDetails.email = (call.arguments as! Dictionary<String, AnyObject>)["billingDetailsEmail"] as? String
+      
       
       _createPaymentMethodCard(paymentMethodCreateParams: STPPaymentMethodParams(card: cardParams, billingDetails: billingDetails, metadata: nil), result: result)
+      break
+    case "authenticatePayment":
+      let paymentIntentSecret = (call.arguments as! Dictionary<String, AnyObject>)["paymentIntentSecret"] as? String
+      
+      _authenticatePayment(paymentIntentSecret: paymentIntentSecret!, result: result)
       break
     default:
       result(FlutterMethodNotImplemented)
@@ -163,6 +175,7 @@ public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin {
     customerSession?.clearCache()
     customerSession = nil;
   }
+
   private func _createPaymentMethodCard(paymentMethodCreateParams: STPPaymentMethodParams, result: @escaping FlutterResult) {
     STPAPIClient.shared().createPaymentMethod(with: paymentMethodCreateParams) { (paymentMethod: STPPaymentMethod?, error: Error?) in
       if (error != nil) {
@@ -170,6 +183,26 @@ public class SwiftFlutterStripeSDKPlugin: NSObject, FlutterPlugin {
       } else {
         result(paymentMethod?.allResponseFields)
       }
+    }
+  }
+  
+  private func _authenticatePayment(paymentIntentSecret: String, result: @escaping FlutterResult) {
+    STPPaymentHandler.shared().confirmPayment(withParams: STPPaymentIntentParams(clientSecret: paymentIntentSecret), authenticationContext: self) { (status: STPPaymentHandler.ActionStatus, paymentIntent: STPPaymentIntent?, error: Error?) in
+        if (error != nil) {
+          result(FlutterError(code: "0", message: "Failed to authenticate payment.", details: nil))
+        } else {
+          switch (status) {
+            case .failed:
+              result(FlutterError(code: "0", message: "Failed to authenticate payment.", details: nil))
+              break;
+            case .canceled:
+              result(FlutterError(code: "0", message: "Failed to authenticate payment.", details: nil))
+              break;
+            case .succeeded:
+              result(nil)
+              break;
+          }
+        }
     }
   }
 }
